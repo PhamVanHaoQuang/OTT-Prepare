@@ -5,9 +5,17 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../otp/otp_screen.dart';
 
-class SignInScreen extends StatelessWidget {
-  const SignInScreen({Key? key}) : super(key: key);
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({Key? key}) : super(key: key);
 
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  bool _isShowPassword = false;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -33,7 +41,10 @@ class SignInScreen extends StatelessWidget {
       height: size.height,
       width: size.width,
       child: Padding(
-        padding: EdgeInsets.only(left: size.width*.12, right: size.width*.12, top: size.width*.12),
+        padding: EdgeInsets.only(
+            left: size.width * .08,
+            right: size.width * .08,
+            top: size.width * .12),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,58 +59,77 @@ class SignInScreen extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                         color: Color(0xff1EC5F9)),
                   ),
-                  SvgPicture.asset("assets/icons/svgs/logo_mcv_go.svg",width: size.width*.25,),
+                  SvgPicture.asset(
+                    "assets/icons/svgs/logo_mcv_go.svg",
+                    width: size.width * .25,
+                  ),
                 ],
               ),
               const SizedBox(height: 48),
-              const Text(
-                "Số điện thoại",
-                style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white),
+              const Padding(
+                padding: EdgeInsets.only(left: 16),
+                child: Text(
+                  "Số điện thoại",
+                  style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white),
+                ),
               ),
               const SizedBox(height: 8),
               TextField(
+                maxLines: 1,
+                controller: phoneController,
+                obscureText: _isShowPassword,
                 cursorColor: Colors.white,
                 style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
                     color: Colors.white),
                 decoration: InputDecoration(
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  fillColor: const Color(0xff4B4B4B),
-                  filled: true,
-                  focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        const BorderSide(color: Color(0xff1EC5F9), width: 1.0),
-                    borderRadius: BorderRadius.circular(32.0),
-                  ),
-                  hintText: "Nhập số điện thoại",
-                  hintStyle: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white.withOpacity(0.5)),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(32.0),
-                  ),
-                  suffixIcon: SvgPicture.asset(
-                    "assets/icons/svgs/ic_delete.svg",
-                    fit: BoxFit.scaleDown,
-                  ),
-                ),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
+                    fillColor: const Color(0xff4B4B4B),
+                    filled: true,
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                          color: Color(0xff1EC5F9), width: 1.0),
+                      borderRadius: BorderRadius.circular(32.0),
+                    ),
+                    hintText: "Nhập số điện thoại",
+                    hintStyle: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white.withOpacity(0.5)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(32.0),
+                    ),
+                    suffixIcon: IconButton(
+                      icon: SvgPicture.asset(
+                        "assets/icons/svgs/ic_delete.svg",
+                        fit: BoxFit.scaleDown,
+                      ),
+                      onPressed: () {
+                        phoneController.clear();
+                      },
+                    )),
               ),
               const SizedBox(height: 24),
-              const Text(
-                "Mật khẩu",
-                style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white),
+              const Padding(
+                padding: EdgeInsets.only(left: 16),
+                child: Text(
+                  "Mật khẩu",
+                  style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white),
+                ),
               ),
               const SizedBox(height: 8),
               TextField(
+                maxLines: 1,
+                controller: passwordController,
+                obscureText: _isShowPassword,
                 cursorColor: Colors.white,
                 style: const TextStyle(
                     fontSize: 15,
@@ -123,9 +153,20 @@ class SignInScreen extends StatelessWidget {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(32.0),
                   ),
-                  suffixIcon: Icon(
-                    Icons.remove_red_eye_outlined,
-                    color: Colors.white.withOpacity(0.5),
+                  suffixIcon: IconButton(
+                    icon: (_isShowPassword)
+                        ? Icon(
+                            Icons.remove_red_eye_outlined,
+                            color: Colors.white.withOpacity(0.5),
+                          )
+                        : Icon(
+                            Icons.visibility_off_outlined,
+                            color: Colors.white.withOpacity(0.5),
+                          ),
+                    onPressed: () => setState(() {
+                      _isShowPassword = !_isShowPassword;
+                      print(_isShowPassword);
+                    }),
                   ),
                 ),
               ),
@@ -164,7 +205,8 @@ class SignInScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const OTPScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => const OTPScreen()),
                       );
                     },
                     child: const Text(

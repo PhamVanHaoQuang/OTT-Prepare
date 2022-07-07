@@ -1,9 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:ott_prepare/src/presentations/otp/complete_sign_in.dart';
+import 'package:ott_prepare/src/success_screen/success_screen.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class OTPScreen extends StatefulWidget {
@@ -157,7 +156,7 @@ class _OTPScreenState extends State<OTPScreen> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const CompleteSignIn()),
+                        MaterialPageRoute(builder: (context) => const SuccessScreen(title: "Đăng ký hoàn tất",buttonTitle: "Bắt đầu",subTitle: "Chào mừng bạn đến với MCVGo",)),
                       );
                     },
                     child: const Text(

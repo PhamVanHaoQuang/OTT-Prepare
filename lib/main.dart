@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ott_prepare/src/presentations/phone_auth/terms_of_use/teams_of_use_screen.dart';
-import 'package:ott_prepare/src/presentations/sign_in/sign_in_screen.dart';
+import 'package:ott_prepare/src/presentations/sign_in/sign_up_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       title: 'OTT Prepare',
       initialRoute: '/',
       routes: {
-        '/': (context) => const SignInScreen(),
+        '/': (context) => const SignUpScreen(),
         '/teams-of-use': (context) => const TeamsOfUseScreen(),
       },
       debugShowCheckedModeBanner: false,
