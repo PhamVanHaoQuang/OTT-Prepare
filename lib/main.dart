@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ott_prepare/src/presentations/phone_auth/terms_of_use/teams_of_use_screen.dart';
-import 'package:ott_prepare/src/presentations/sign_in/login_screen.dart';
+import 'package:ott_prepare/src/presentations/sign_in/sign_in_screen.dart';
 
 void main() {
   runApp(const MyApp());

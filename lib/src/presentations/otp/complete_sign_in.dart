@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:ott_prepare/src/presentations/sign_in/login_screen.dart';
+import 'package:ott_prepare/src/presentations/sign_in/sign_in_screen.dart';
 
 class CompleteSignIn extends StatelessWidget {
   const CompleteSignIn({Key? key}) : super(key: key);
