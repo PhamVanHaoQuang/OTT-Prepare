@@ -138,15 +138,6 @@ class _LoginScreenState extends State<LoginScreen> {
             passwordVisible: true,
             errorText: errorTextPassword,
             textEditingController: passwordEditingController,
-            // validator: (val) {
-            //   if (Util.isNullOrEmpty(val)) {
-            //     return 'Vui lòng nhập mật khẩu hiện tại';
-            //   }
-            //   if (val!.isLessThen8) {
-            //     return 'Mật khẩu nhập không đủ 8 kí tự';
-            //   }
-            //   return null;
-            // },
           ),
           SizedBox(
             height: size.height * 8 / 896,

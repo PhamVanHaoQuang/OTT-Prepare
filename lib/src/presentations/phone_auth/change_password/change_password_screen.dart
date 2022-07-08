@@ -16,10 +16,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   late TextEditingController newPasswordEditingController;
   late TextEditingController confirmPasswordEditingController;
 
-  // final _globalFormKey = GlobalKey<FormState>();
-  //AutovalidateMode? _autoValidate = AutovalidateMode.disabled;
-
-  Color colorButton = const Color(0xff8C8C8C);
   String? errorTextPassword;
   String? errorTextNewPassword;
   String? errorTextConfirmPassword;
@@ -119,8 +115,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             textEditingController: oldPasswordEditingController,
             onChanged: (value) {
               errorTextPassword = '';
-              // validatePassword(oldPasswordEditingController, errorTextPassword);
-
               if (value.isEmpty) {
                 errorTextPassword = 'Vui lòng nhập mật khẩu hiện tại';
               } else if (value.length < 8) {
@@ -131,15 +125,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
               setState(() {});
             },
-
-            // validator: (val) {
-            //   if (Util.isNullOrEmpty(val)) {
-            //     return 'Vui lòng nhập mật khẩu hiện tại';
-            //   } else if (val!.isLessThen8) {
-            //     return 'Mật khẩu nhập không đủ 8 kí tự';
-            //   }
-            //   return onChangedOldPassword = null;
-            // },
           ),
           SizedBox(
             height: size.height * 8 / 896,
@@ -162,16 +147,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
               setState(() {});
             },
-            // validator: (val) {
-            //   if (Util.isNullOrEmpty(val)) {
-            //     return 'Vui lòng nhập mật khẩu mới';
-            //   } else if (val!.isLessThen8) {
-            //     return 'Mật khẩu nhập không đủ 8 kí tự';
-            //   } else if (val == oldPasswordEditingController.text) {
-            //     return 'Trùng với mật khẩu hiện tại';
-            //   }
-            //   return null;
-            // },
           ),
           SizedBox(
             height: size.height * 8 / 896,
@@ -194,16 +169,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
               setState(() {});
             },
-            // validator: (val) {
-            //   if (Util.isNullOrEmpty(val)) {
-            //     return 'Vui lòng nhập lại mật khẩu mới';
-            //   } else if (val!.isLessThen8) {
-            //     return 'Mật khẩu nhập không đủ 8 kí tự';
-            //   } else if (val != newPasswordEditingController.text) {
-            //     return 'Mật khẩu nhập lại không đúng';
-            //   }
-            //   return null;
-            // },
           ),
           SizedBox(
             height: size.height * 87 / 896,
@@ -212,50 +177,28 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             text: 'Xác nhận',
             width: size.width / 2,
             colorText: Colors.white,
-            colorButton: (validatePassword(
-                        oldPasswordEditingController, errorTextPassword) &&
-                    validateNewPassword(
-                        newPasswordEditingController, errorTextNewPassword) &&
-                    validateConfirmPassword(confirmPasswordEditingController,
-                        errorTextConfirmPassword) &&
-                    // oldPasswordEditingController !=
-                    //     newPasswordEditingController &&
-                    // newPasswordEditingController ==
-                    //     confirmPasswordEditingController &&
-                    errorTextPassword == '' &&
-                    errorTextNewPassword == '' &&
-                    errorTextConfirmPassword == '')
-                ? const Color(0xff1EC5F9)
-                : const Color(0xff8C8C8C),
+            colorButton:
+                (validatePassword(
+                            oldPasswordEditingController, errorTextPassword) &&
+                        validateNewPassword(newPasswordEditingController,
+                            errorTextNewPassword) &&
+                        validateConfirmPassword(
+                            confirmPasswordEditingController,
+                            errorTextConfirmPassword) &&
+                        errorTextPassword == '' &&
+                        errorTextNewPassword == '' &&
+                        errorTextConfirmPassword == '')
+                    ? const Color(0xff1EC5F9)
+                    : const Color(0xff8C8C8C),
             onTap: () {
-              //Form.of(context)!.validate();
               FocusManager.instance.primaryFocus?.unfocus();
-
               // final isValidate = _globalFormKey.currentState?.validate();
-
               // print(isValidate);
-
-              // if (isValidate ?? true) {
-              //   setState(() {
-              //     colorButton = const Color(0xff1EC5F9);
-              //   });
-              // } else {
-              //   setState(() {
-              //     _autoValidate = AutovalidateMode.onUserInteraction;
-              //   });
-              // }
-              //   _globalFormKey.currentState?.save();
-              // }else{
-              //   setState(() {
-
-              //   });
-              // }
             },
           ),
         ],
       ),
     );
-    print(errorTextPassword.toString());
   }
 
   @override
