@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:ott_prepare/src/configs/string_extension.dart';
 import 'package:ott_prepare/src/widget/button_widget.dart';
 
+import '../../../helper/validate_helper.dart';
 import '../../../widget/password_text_field_widget.dart';
+
+enum Status { pure, dirty }
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({Key? key}) : super(key: key);
@@ -20,43 +23,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   String? errorTextNewPassword;
   String? errorTextConfirmPassword;
 
+  Status testPasswordStatus = Status.pure;
+  Status testNewPasswordStatus = Status.pure;
+  Status testConfirmPasswordStatus = Status.pure;
+
   @override
   void initState() {
     super.initState();
-    oldPasswordEditingController = TextEditingController(text: '');
-    newPasswordEditingController = TextEditingController(text: '');
-    confirmPasswordEditingController = TextEditingController(text: '');
-  }
-
-  String? validatePassword(String text) {
-    if (text.isEmpty) {
-      return errorTextPassword = 'Vui lòng nhập mật khẩu hiện tại';
-    } else if (text.length < 8) {
-      return errorTextPassword = 'Mật khẩu nhập không đủ 8 kí tự';
-    }
-    return errorTextPassword = null;
-  }
-
-  String? validateNewPassword(String text) {
-    if (text.isEmpty) {
-      return errorTextNewPassword = 'Vui lòng nhập mật khẩu mới';
-    } else if (text.length < 8) {
-      return errorTextNewPassword = 'Mật khẩu nhập không đủ 8 kí tự';
-    } else if (text == oldPasswordEditingController.text) {
-      return errorTextNewPassword = 'Trùng với mật khẩu hiện tại';
-    }
-    return errorTextNewPassword = null;
-  }
-
-  String? validateConfirmPassword(String text) {
-    if (text.isEmpty) {
-      return errorTextConfirmPassword = 'Vui lòng nhập lại mật khẩu mới';
-    } else if (text.length < 8) {
-      return errorTextConfirmPassword = 'Mật khẩu nhập không đủ 8 kí tự';
-    } else if (text != newPasswordEditingController.text) {
-      return errorTextConfirmPassword = 'Mật khẩu nhập lại không đúng';
-    }
-    return errorTextConfirmPassword = null;
+    oldPasswordEditingController = TextEditingController();
+    newPasswordEditingController = TextEditingController();
+    confirmPasswordEditingController = TextEditingController();
   }
 
   @override
@@ -101,13 +77,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       child: Column(
         children: [
           PasswordTextFieldWidget(
-            errorText: errorTextPassword,
+            errorText: (testPasswordStatus == Status.dirty)
+                ? ValidateHelper.validatePassword(
+                    oldPasswordEditingController.text)
+                : null,
             text: 'Mật khẩu hiện tại',
             passwordVisible: true,
             textEditingController: oldPasswordEditingController,
             onChanged: (value) {
               errorTextPassword = '';
-              validatePassword(value);
+              testPasswordStatus = Status.dirty;
               setState(() {});
             },
           ),
@@ -115,13 +94,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             height: size.height * 8 / 896,
           ),
           PasswordTextFieldWidget(
-            errorText: errorTextNewPassword,
+            errorText: (testNewPasswordStatus == Status.dirty)
+                ? ValidateHelper.validateNewPassword(
+                    newPasswordEditingController.text,
+                    oldPasswordEditingController.text)
+                : null,
             text: 'Mật khẩu mới',
             passwordVisible: true,
             textEditingController: newPasswordEditingController,
             onChanged: (value) {
-              errorTextNewPassword = null;
-              validateNewPassword(value);
+              testNewPasswordStatus = Status.dirty;
               setState(() {});
             },
           ),
@@ -129,12 +111,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             height: size.height * 8 / 896,
           ),
           PasswordTextFieldWidget(
-            errorText: errorTextConfirmPassword,
+            errorText: (testConfirmPasswordStatus == Status.dirty)
+                ? ValidateHelper.validateConfirmPassword(
+                    confirmPasswordEditingController.text,
+                    newPasswordEditingController.text)
+                : null,
             text: 'Nhập lại mật khẩu mới',
             passwordVisible: true,
             textEditingController: confirmPasswordEditingController,
             onChanged: (value) {
-              validateConfirmPassword(confirmPasswordEditingController.text);
+              testConfirmPasswordStatus = Status.dirty;
               setState(() {});
             },
           ),
@@ -145,21 +131,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             text: 'Xác nhận',
             width: size.width / 2,
             colorText: Colors.white,
-            colorButton:
-                (validatePassword(oldPasswordEditingController.text) == null &&
-                        validateNewPassword(
-                              newPasswordEditingController.text,
-                            ) ==
-                            null &&
-                        validateConfirmPassword(
-                              confirmPasswordEditingController.text,
-                            ) ==
-                            null &&
-                        errorTextPassword == null &&
-                        errorTextNewPassword == null &&
-                        errorTextConfirmPassword == null)
-                    ? const Color(0xff1EC5F9)
-                    : const Color(0xff8C8C8C),
+            colorButton: (errorTextPassword == null &&
+                    errorTextNewPassword == null &&
+                    errorTextConfirmPassword == null)
+                ? const Color(0xff1EC5F9)
+                : const Color(0xff8C8C8C),
             onTap: () {
               FocusManager.instance.primaryFocus?.unfocus();
             },
