@@ -34,7 +34,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     } else if (text.length < 8) {
       return errorTextPassword = 'Mật khẩu nhập không đủ 8 kí tự';
     }
-    return null;
+    return errorTextPassword = null;
   }
 
   String? validateNewPassword(String text) {
