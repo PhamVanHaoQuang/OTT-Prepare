@@ -54,14 +54,14 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
       width: size.width,
       child: Padding(
         padding: EdgeInsets.only(
-            left: size.width * .08,
-            right: size.width * .08,
+            left: size.width * .078,
+            right: size.width * .078,
             top: size.width * .12),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 32),
+              SizedBox(height: size.height * 32 / 896),
               const Padding(
                 padding: EdgeInsets.only(left: 16),
                 child: Text(
@@ -72,7 +72,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       color: Colors.white),
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: size.height * 8 / 896),
               TextField(
                 maxLines: 1,
                 cursorColor: Colors.white,
@@ -113,7 +113,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       },
                     )),
               ),
-              const SizedBox(height: 66),
+              SizedBox(height: size.height * 66 / 896),
               Center(
                 child: SizedBox(
                   width: 215,

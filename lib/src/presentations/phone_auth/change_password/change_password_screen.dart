@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ott_prepare/src/configs/string_extension.dart';
 import 'package:ott_prepare/src/widget/button_widget.dart';
 
+import '../../../helper/validate_helper.dart';
 import '../../../widget/password_text_field_widget.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
@@ -16,47 +16,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   late TextEditingController newPasswordEditingController;
   late TextEditingController confirmPasswordEditingController;
 
-  String? errorTextPassword;
-  String? errorTextNewPassword;
-  String? errorTextConfirmPassword;
+  TestStatus testPasswordStatus = TestStatus.pure;
+  TestStatus testNewPasswordStatus = TestStatus.pure;
+  TestStatus testConfirmPasswordStatus = TestStatus.pure;
 
   @override
   void initState() {
     super.initState();
-    oldPasswordEditingController = TextEditingController(text: '');
-    newPasswordEditingController = TextEditingController(text: '');
-    confirmPasswordEditingController = TextEditingController(text: '');
-  }
-
-  String? validatePassword(String text) {
-    if (text.isEmpty) {
-      return errorTextPassword = 'Vui lòng nhập mật khẩu hiện tại';
-    } else if (text.length < 8) {
-      return errorTextPassword = 'Mật khẩu nhập không đủ 8 kí tự';
-    }
-    return null;
-  }
-
-  String? validateNewPassword(String text) {
-    if (text.isEmpty) {
-      return errorTextNewPassword = 'Vui lòng nhập mật khẩu mới';
-    } else if (text.length < 8) {
-      return errorTextNewPassword = 'Mật khẩu nhập không đủ 8 kí tự';
-    } else if (text == oldPasswordEditingController.text) {
-      return errorTextNewPassword = 'Trùng với mật khẩu hiện tại';
-    }
-    return errorTextNewPassword = null;
-  }
-
-  String? validateConfirmPassword(String text) {
-    if (text.isEmpty) {
-      return errorTextConfirmPassword = 'Vui lòng nhập lại mật khẩu mới';
-    } else if (text.length < 8) {
-      return errorTextConfirmPassword = 'Mật khẩu nhập không đủ 8 kí tự';
-    } else if (text != newPasswordEditingController.text) {
-      return errorTextConfirmPassword = 'Mật khẩu nhập lại không đúng';
-    }
-    return errorTextConfirmPassword = null;
+    oldPasswordEditingController = TextEditingController();
+    newPasswordEditingController = TextEditingController();
+    confirmPasswordEditingController = TextEditingController();
   }
 
   @override
@@ -101,13 +70,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       child: Column(
         children: [
           PasswordTextFieldWidget(
-            errorText: errorTextPassword,
+            errorText: ValidateHelper.getErrorTextPassword(
+                oldPasswordEditingController.text, testPasswordStatus),
             text: 'Mật khẩu hiện tại',
             passwordVisible: true,
             textEditingController: oldPasswordEditingController,
             onChanged: (value) {
-              errorTextPassword = '';
-              validatePassword(value);
+              testPasswordStatus = TestStatus.dirty;
               setState(() {});
             },
           ),
@@ -115,13 +84,15 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             height: size.height * 8 / 896,
           ),
           PasswordTextFieldWidget(
-            errorText: errorTextNewPassword,
+            errorText: ValidateHelper.getErrorTextNewPassword(
+                oldPasswordEditingController.text,
+                newPasswordEditingController.text,
+                testNewPasswordStatus),
             text: 'Mật khẩu mới',
             passwordVisible: true,
             textEditingController: newPasswordEditingController,
             onChanged: (value) {
-              errorTextNewPassword = null;
-              validateNewPassword(value);
+              testNewPasswordStatus = TestStatus.dirty;
               setState(() {});
             },
           ),
@@ -129,12 +100,15 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             height: size.height * 8 / 896,
           ),
           PasswordTextFieldWidget(
-            errorText: errorTextConfirmPassword,
+            errorText: ValidateHelper.getErrorTextConfirmPassword(
+                confirmPasswordEditingController.text,
+                newPasswordEditingController.text,
+                testConfirmPasswordStatus),
             text: 'Nhập lại mật khẩu mới',
             passwordVisible: true,
             textEditingController: confirmPasswordEditingController,
             onChanged: (value) {
-              validateConfirmPassword(confirmPasswordEditingController.text);
+              testConfirmPasswordStatus = TestStatus.dirty;
               setState(() {});
             },
           ),
@@ -145,21 +119,22 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             text: 'Xác nhận',
             width: size.width / 2,
             colorText: Colors.white,
-            colorButton:
-                (validatePassword(oldPasswordEditingController.text) == null &&
-                        validateNewPassword(
-                              newPasswordEditingController.text,
-                            ) ==
-                            null &&
-                        validateConfirmPassword(
-                              confirmPasswordEditingController.text,
-                            ) ==
-                            null &&
-                        errorTextPassword == null &&
-                        errorTextNewPassword == null &&
-                        errorTextConfirmPassword == null)
-                    ? const Color(0xff1EC5F9)
-                    : const Color(0xff8C8C8C),
+            colorButton: (ValidateHelper.getErrorTextPassword(
+                            oldPasswordEditingController.text,
+                            testPasswordStatus) ==
+                        null &&
+                    ValidateHelper.getErrorTextNewPassword(
+                            oldPasswordEditingController.text,
+                            newPasswordEditingController.text,
+                            testNewPasswordStatus) ==
+                        null &&
+                    ValidateHelper.getErrorTextConfirmPassword(
+                            confirmPasswordEditingController.text,
+                            newPasswordEditingController.text,
+                            testConfirmPasswordStatus) ==
+                        null)
+                ? const Color(0xff1EC5F9)
+                : const Color(0xff8C8C8C),
             onTap: () {
               FocusManager.instance.primaryFocus?.unfocus();
             },

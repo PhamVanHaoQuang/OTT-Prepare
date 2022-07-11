@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../configs/string_extension.dart';
+import '../../helper/validate_helper.dart';
 import '../../widget/button_widget.dart';
 import '../../widget/list_icon_widget.dart';
 import '../../widget/password_text_field_widget.dart';
@@ -15,20 +16,13 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   late TextEditingController passwordEditingController;
-  String? errorTextPassword;
+
+  TestStatus testPasswordStatus = TestStatus.pure;
+
   @override
   void initState() {
     super.initState();
     passwordEditingController = TextEditingController(text: '');
-  }
-
-  String? validatePassword(String text) {
-    if (text.isEmpty) {
-      return errorTextPassword = 'Vui lòng nhập mật khẩu hiện tại';
-    } else if (text.length < 8) {
-      return errorTextPassword = 'Mật khẩu nhập không đủ 8 kí tự';
-    }
-    return null;
   }
 
   @override
@@ -132,16 +126,15 @@ class _LoginScreenState extends State<LoginScreen> {
             height: 10,
           ),
           PasswordTextFieldWidget(
+            errorText: ValidateHelper.getErrorTextPassword(
+                passwordEditingController.text, testPasswordStatus),
+            text: 'Mật khẩu hiện tại',
             passwordVisible: true,
+            textEditingController: passwordEditingController,
             onChanged: (value) {
-              errorTextPassword = null;
-
-              validatePassword(passwordEditingController.text);
+              testPasswordStatus = TestStatus.dirty;
               setState(() {});
             },
-            text: 'Mật khẩu',
-            errorText: errorTextPassword,
-            textEditingController: passwordEditingController,
           ),
           SizedBox(
             height: size.height * 8 / 896,
