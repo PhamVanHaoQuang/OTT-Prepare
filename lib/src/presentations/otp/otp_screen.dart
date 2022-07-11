@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:ott_prepare/src/presentations/forget_password/forget_password_screen.dart';
 import 'package:ott_prepare/src/success_screen/success_screen.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -12,10 +13,10 @@ class OTPScreen extends StatefulWidget {
   State<OTPScreen> createState() => _OTPScreenState();
 }
 
-StreamController<ErrorAnimationType>? errorController;
-
 class _OTPScreenState extends State<OTPScreen> {
   late TextEditingController pinController;
+  StreamController<ErrorAnimationType>? errorController;
+  bool _isCompleted = false;
 
   @override
   void initState() {
@@ -37,7 +38,7 @@ class _OTPScreenState extends State<OTPScreen> {
               fit: BoxFit.scaleDown,
             ),
           ),
-          title: Text(
+          title: const Text(
             "Xác nhận OTP",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
           ),
@@ -96,20 +97,15 @@ class _OTPScreenState extends State<OTPScreen> {
                   animationType: AnimationType.fade,
                   controller: pinController,
                   animationDuration: const Duration(milliseconds: 300),
-                  enableActiveFill: true,
                   errorAnimationController: errorController,
                   keyboardType: TextInputType.number,
-                  onCompleted: (v) {
-                    debugPrint("Completed");
-                  },
-                  // onTap: () {
-                  //   print("Pressed");
-                  // },
                   onChanged: (value) {
-                    debugPrint(value);
-                    setState(() {
-                      // currentText = value;
-                    });
+                    if (value.length < 6) {
+                      _isCompleted = false;
+                    } else {
+                      _isCompleted = true;
+                    }
+                    setState(() {});
                   },
                   pinTheme: PinTheme(
                     fieldWidth: size.width * .1,
@@ -117,15 +113,21 @@ class _OTPScreenState extends State<OTPScreen> {
                     activeFillColor: Colors.black,
                     activeColor: Colors.white,
                     selectedColor: Colors.white,
-                    disabledColor: Colors.white,
                     inactiveColor: Colors.white,
                     selectedFillColor: Colors.black,
                     inactiveFillColor: Colors.black,
+                    errorBorderColor: const Color(0xffFF2820),
                   ),
                 ),
               ),
               const SizedBox(height: 24),
-              Text("Thời gian nhập mã còn 35s", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: Colors.white.withOpacity(0.5)),),
+              Text(
+                "Thời gian nhập mã còn 35s",
+                style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white.withOpacity(0.5)),
+              ),
               const SizedBox(height: 24),
               Center(
                 child: RichText(
@@ -156,7 +158,18 @@ class _OTPScreenState extends State<OTPScreen> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const SuccessScreen(title: "Đăng ký hoàn tất",buttonTitle: "Bắt đầu",subTitle: "Chào mừng bạn đến với MCVGo",)),
+                        MaterialPageRoute(
+                          builder: (context) => SuccessScreen(
+                            title: "Đăng ký hoàn tất",
+                            buttonTitle: "Bắt đầu",
+                            subTitle: "Chào mừng bạn đến với MCVGo",
+                            onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ForgetPasswordScreen())),
+                          ),
+                        ),
                       );
                     },
                     child: const Text(
@@ -167,8 +180,11 @@ class _OTPScreenState extends State<OTPScreen> {
                           fontSize: 15),
                     ),
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          const Color(0xffFFFFFF).withOpacity(0.5)),
+                      backgroundColor: (_isCompleted)
+                          ? MaterialStateProperty.all<Color>(
+                              const Color(0xff1EC5F9))
+                          : MaterialStateProperty.all<Color>(
+                              const Color(0xffFFFFFF).withOpacity(0.5)),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(32),

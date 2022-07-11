@@ -14,10 +14,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   TextEditingController confirmPasswordController = TextEditingController();
   bool _isShowPassword = false;
   bool _isShowConfirmPassword = false;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: ()=>FocusScope.of(context).requestFocus(FocusNode()),
+      onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
         appBar: AppBar(
           leading: InkWell(
@@ -133,12 +134,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   color: Colors.white),
               decoration: InputDecoration(
                 contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 fillColor: const Color(0xff4B4B4B),
                 filled: true,
                 focusedBorder: OutlineInputBorder(
                   borderSide:
-                  const BorderSide(color: Color(0xff1EC5F9), width: 1.0),
+                      const BorderSide(color: Color(0xff1EC5F9), width: 1.0),
                   borderRadius: BorderRadius.circular(32.0),
                 ),
                 hintText: "Ít nhất 8 kí tự",
@@ -152,16 +153,18 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 suffixIcon: IconButton(
                   icon: (_isShowConfirmPassword)
                       ? Icon(
-                    Icons.remove_red_eye_outlined,
-                    color: Colors.white.withOpacity(0.5),
-                  )
+                          Icons.remove_red_eye_outlined,
+                          color: Colors.white.withOpacity(0.5),
+                        )
                       : Icon(
-                    Icons.visibility_off_outlined,
-                    color: Colors.white.withOpacity(0.5),
+                          Icons.visibility_off_outlined,
+                          color: Colors.white.withOpacity(0.5),
+                        ),
+                  onPressed: () => setState(
+                    () {
+                      _isShowConfirmPassword = !_isShowConfirmPassword;
+                    },
                   ),
-                  onPressed: () => setState(() {
-                    _isShowConfirmPassword = !_isShowConfirmPassword;
-                  },),
                 ),
               ),
             ),
@@ -171,7 +174,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 width: 215,
                 child: TextButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const SuccessScreen(title: "Đổi mật khẩu thành công",buttonTitle:  "OK",),));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SuccessScreen(
+                          title: "Đổi mật khẩu thành công",
+                          buttonTitle: "OK",
+                          onPressed: () => setState(() {}),
+                        ),
+                      ),
+                    );
                   },
                   child: const Text(
                     "Xác nhận",

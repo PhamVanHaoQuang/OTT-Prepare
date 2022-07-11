@@ -15,7 +15,9 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  bool _isShowPassword = false;
+  bool _isObscurePassword = true;
+  String? errorText;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -52,12 +54,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    "Đăng ký",
-                    style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xff1EC5F9)),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 16.0),
+                    child: Text(
+                      "Đăng ký",
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xff1EC5F9)),
+                    ),
                   ),
                   SvgPicture.asset(
                     "assets/icons/svgs/logo_mcv_go.svg",
@@ -80,8 +85,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
               TextField(
                 maxLines: 1,
                 controller: phoneController,
-                obscureText: _isShowPassword,
+                obscureText: _isObscurePassword,
                 cursorColor: Colors.white,
+                onChanged: (text) {
+                  setState(() {});
+                },
                 style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
@@ -96,7 +104,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           color: Color(0xff1EC5F9), width: 1.0),
                       borderRadius: BorderRadius.circular(32.0),
                     ),
+                    helperText: "",
                     hintText: "Nhập số điện thoại",
+                    errorText: null,
                     hintStyle: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
@@ -111,10 +121,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       onPressed: () {
                         phoneController.clear();
+                        setState(() {
+
+                        });
                       },
                     )),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 12),
               const Padding(
                 padding: EdgeInsets.only(left: 16),
                 child: Text(
@@ -129,12 +142,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
               TextField(
                 maxLines: 1,
                 controller: passwordController,
-                obscureText: _isShowPassword,
+                obscureText: _isObscurePassword,
                 cursorColor: Colors.white,
                 style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
                     color: Colors.white),
+                onChanged: (text) {
+                  if (text.length < 8) {
+                    errorText = "Mật khẩu không đủ 8 kí tự";
+                  } else {
+                    errorText = null;
+                  }
+                  setState(() {});
+                },
                 decoration: InputDecoration(
                   contentPadding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -150,11 +171,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       fontSize: 15,
                       fontWeight: FontWeight.w400,
                       color: Colors.white.withOpacity(0.5)),
+                  helperText: "",
+                  errorText: errorText,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(32.0),
                   ),
                   suffixIcon: IconButton(
-                    icon: (_isShowPassword)
+                    icon: (_isObscurePassword)
                         ? Icon(
                             Icons.remove_red_eye_outlined,
                             color: Colors.white.withOpacity(0.5),
@@ -163,14 +186,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             Icons.visibility_off_outlined,
                             color: Colors.white.withOpacity(0.5),
                           ),
-                    onPressed: () => setState(() {
-                      _isShowPassword = !_isShowPassword;
-                      print(_isShowPassword);
-                    }),
+                    onPressed: () => setState(
+                      () {
+                        _isObscurePassword = !_isObscurePassword;
+                      },
+                    ),
                   ),
                 ),
               ),
-              const SizedBox(height: 48),
+              const SizedBox(height: 36),
               Center(
                 child: RichText(
                   text: TextSpan(
@@ -202,13 +226,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   width: 215,
                   height: 40,
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const OTPScreen()),
-                      );
-                    },
+                    onPressed: (phoneController.text.isNotEmpty &&
+                            passwordController.text.isNotEmpty &&
+                            errorText == null)
+                        ? () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const OTPScreen()),
+                            );
+                          }
+                        : null,
                     child: const Text(
                       "Đăng ký",
                       style: TextStyle(
@@ -217,8 +245,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           fontSize: 15),
                     ),
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          const Color(0xffFFFFFF).withOpacity(0.5)),
+                      backgroundColor: (phoneController.text.isNotEmpty &&
+                              passwordController.text.isNotEmpty &&
+                              errorText == null)
+                          ? MaterialStateProperty.all<Color>(
+                              const Color(0xff1EC5F9))
+                          : MaterialStateProperty.all<Color>(
+                              const Color(0xffFFFFFF).withOpacity(0.5)),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(32),

@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:ott_prepare/src/presentations/sign_in/sign_up_screen.dart';
-
-import '../presentations/forget_password/forget_password_screen.dart';
 
 class SuccessScreen extends StatelessWidget {
   const SuccessScreen(
-      {Key? key, required this.title, required this.buttonTitle, this.subTitle})
+      {Key? key, required this.title, required this.buttonTitle, this.subTitle, required this.onPressed})
       : super(key: key);
   final String title;
   final String buttonTitle;
   final String? subTitle;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +52,7 @@ class SuccessScreen extends StatelessWidget {
             width: 215,
             height: 40,
             child: TextButton(
-              onPressed: () {},
+              onPressed: onPressed,
               child: Text(
                 buttonTitle,
                 style: const TextStyle(
