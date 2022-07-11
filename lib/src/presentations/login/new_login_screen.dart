@@ -22,6 +22,15 @@ class _LoginScreenState extends State<LoginScreen> {
     passwordEditingController = TextEditingController(text: '');
   }
 
+  String? validatePassword(String text) {
+    if (text.isEmpty) {
+      return errorTextPassword = 'Vui lòng nhập mật khẩu hiện tại';
+    } else if (text.length < 8) {
+      return errorTextPassword = 'Mật khẩu nhập không đủ 8 kí tự';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     const String errorTextPhone = '';
@@ -124,14 +133,8 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           PasswordTextFieldWidget(
             onChanged: (value) {
-              if (value.isEmpty) {
-                errorTextPassword = 'Vui lòng nhập mật khẩu hiện tại';
-              } else if (value.length < 8) {
-                errorTextPassword = 'Mật khẩu nhập không đủ 8 kí tự';
-              } else {
-                errorTextPassword = null;
-              }
-
+              errorTextPassword = null;
+              validatePassword(passwordEditingController.text);
               setState(() {});
             },
             text: 'Mật khẩu',

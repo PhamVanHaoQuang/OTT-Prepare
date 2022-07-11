@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ott_prepare/src/presentations/login/login_screen.dart';
+import 'package:ott_prepare/src/presentations/login/new_login_screen.dart';
 import 'package:ott_prepare/src/presentations/login/login_smart_tv/edit_info_screen.dart';
 import 'package:ott_prepare/src/presentations/login/register_screen.dart';
 import 'package:ott_prepare/src/presentations/phone_auth/change_password/change_password_screen.dart';
