@@ -28,43 +28,35 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     confirmPasswordEditingController = TextEditingController(text: '');
   }
 
-  bool validatePassword(TextEditingController text, String? errorText) {
-    if (text.text.isEmpty) {
-      errorText = 'Vui lòng nhập mật khẩu hiện tại';
-      return false;
-    } else if (text.text.length < 8) {
-      errorText = 'Mật khẩu nhập không đủ 8 kí tự';
-      return false;
+  String? validatePassword(String text) {
+    if (text.isEmpty) {
+      return errorTextPassword = 'Vui lòng nhập mật khẩu hiện tại';
+    } else if (text.length < 8) {
+      return errorTextPassword = 'Mật khẩu nhập không đủ 8 kí tự';
     }
-    return true;
+    return null;
   }
 
-  bool validateNewPassword(TextEditingController text, String? errorText) {
-    if (text.text.isEmpty) {
-      errorText = 'Vui lòng nhập mật khẩu mới';
-      return false;
-    } else if (text.text.length < 8) {
-      errorText = 'Mật khẩu nhập không đủ 8 kí tự';
-      return false;
-    } else if (text.text == oldPasswordEditingController.text) {
-      errorText = 'Trùng với mật khẩu hiện tại';
-      return false;
+  String? validateNewPassword(String text) {
+    if (text.isEmpty) {
+      return errorTextNewPassword = 'Vui lòng nhập mật khẩu mới';
+    } else if (text.length < 8) {
+      return errorTextNewPassword = 'Mật khẩu nhập không đủ 8 kí tự';
+    } else if (text == oldPasswordEditingController.text) {
+      return errorTextNewPassword = 'Trùng với mật khẩu hiện tại';
     }
-    return true;
+    return errorTextNewPassword = null;
   }
 
-  bool validateConfirmPassword(TextEditingController text, String? errorText) {
-    if (text.text.isEmpty) {
-      errorText = 'Vui lòng nhập lại mật khẩu mới';
-      return false;
-    } else if (text.text.length < 8) {
-      errorText = 'Mật khẩu nhập không đủ 8 kí tự';
-      return false;
-    } else if (text.text != newPasswordEditingController.text) {
-      errorText = 'Mật khẩu nhập lại không đúng';
-      return false;
+  String? validateConfirmPassword(String text) {
+    if (text.isEmpty) {
+      return errorTextConfirmPassword = 'Vui lòng nhập lại mật khẩu mới';
+    } else if (text.length < 8) {
+      return errorTextConfirmPassword = 'Mật khẩu nhập không đủ 8 kí tự';
+    } else if (text != newPasswordEditingController.text) {
+      return errorTextConfirmPassword = 'Mật khẩu nhập lại không đúng';
     }
-    return true;
+    return errorTextConfirmPassword = null;
   }
 
   @override
@@ -115,14 +107,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             textEditingController: oldPasswordEditingController,
             onChanged: (value) {
               errorTextPassword = '';
-              if (value.isEmpty) {
-                errorTextPassword = 'Vui lòng nhập mật khẩu hiện tại';
-              } else if (value.length < 8) {
-                errorTextPassword = 'Mật khẩu nhập không đủ 8 kí tự';
-              } else {
-                errorTextPassword = null;
-              }
-
+              validatePassword(value);
               setState(() {});
             },
           ),
@@ -135,16 +120,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             passwordVisible: true,
             textEditingController: newPasswordEditingController,
             onChanged: (value) {
-              if (value.isEmpty) {
-                errorTextNewPassword = 'Vui lòng nhập mật khẩu mới';
-              } else if (value.length < 8) {
-                errorTextNewPassword = 'Mật khẩu nhập không đủ 8 kí tự';
-              } else if (value == oldPasswordEditingController.text) {
-                errorTextNewPassword = 'Trùng với mật khẩu hiện tại';
-              } else {
-                errorTextNewPassword = null;
-              }
-
+              errorTextNewPassword = null;
+              validateNewPassword(value);
               setState(() {});
             },
           ),
@@ -157,16 +134,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             passwordVisible: true,
             textEditingController: confirmPasswordEditingController,
             onChanged: (value) {
-              if (value.isEmpty) {
-                errorTextConfirmPassword = 'Vui lòng nhập lại mật khẩu mới';
-              } else if (value.length < 8) {
-                errorTextConfirmPassword = 'Mật khẩu nhập không đủ 8 kí tự';
-              } else if (value != newPasswordEditingController.text) {
-                errorTextConfirmPassword = 'Mật khẩu nhập lại không đúng';
-              } else {
-                errorTextConfirmPassword = null;
-              }
-
+              validateConfirmPassword(confirmPasswordEditingController.text);
               setState(() {});
             },
           ),
@@ -178,22 +146,22 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             width: size.width / 2,
             colorText: Colors.white,
             colorButton:
-                (validatePassword(
-                            oldPasswordEditingController, errorTextPassword) &&
-                        validateNewPassword(newPasswordEditingController,
-                            errorTextNewPassword) &&
+                (validatePassword(oldPasswordEditingController.text) == null &&
+                        validateNewPassword(
+                              newPasswordEditingController.text,
+                            ) ==
+                            null &&
                         validateConfirmPassword(
-                            confirmPasswordEditingController,
-                            errorTextConfirmPassword) &&
-                        errorTextPassword == '' &&
-                        errorTextNewPassword == '' &&
-                        errorTextConfirmPassword == '')
+                              confirmPasswordEditingController.text,
+                            ) ==
+                            null &&
+                        errorTextPassword == null &&
+                        errorTextNewPassword == null &&
+                        errorTextConfirmPassword == null)
                     ? const Color(0xff1EC5F9)
                     : const Color(0xff8C8C8C),
             onTap: () {
               FocusManager.instance.primaryFocus?.unfocus();
-              // final isValidate = _globalFormKey.currentState?.validate();
-              // print(isValidate);
             },
           ),
         ],
@@ -206,7 +174,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     oldPasswordEditingController.dispose();
     newPasswordEditingController.dispose();
     confirmPasswordEditingController.dispose();
-
     super.dispose();
   }
 }
