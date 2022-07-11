@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ott_prepare/src/configs/string_extension.dart';
 import 'package:ott_prepare/src/widget/button_widget.dart';
 
 import '../../../helper/validate_helper.dart';
 import '../../../widget/password_text_field_widget.dart';
-
-enum Status { pure, dirty }
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({Key? key}) : super(key: key);
@@ -19,13 +16,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   late TextEditingController newPasswordEditingController;
   late TextEditingController confirmPasswordEditingController;
 
-  String? errorTextPassword;
-  String? errorTextNewPassword;
-  String? errorTextConfirmPassword;
-
-  Status testPasswordStatus = Status.pure;
-  Status testNewPasswordStatus = Status.pure;
-  Status testConfirmPasswordStatus = Status.pure;
+  TestStatus testPasswordStatus = TestStatus.pure;
+  TestStatus testNewPasswordStatus = TestStatus.pure;
+  TestStatus testConfirmPasswordStatus = TestStatus.pure;
 
   @override
   void initState() {
@@ -77,16 +70,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       child: Column(
         children: [
           PasswordTextFieldWidget(
-            errorText: (testPasswordStatus == Status.dirty)
-                ? ValidateHelper.validatePassword(
-                    oldPasswordEditingController.text)
-                : null,
+            errorText: ValidateHelper.getErrorTextPassword(
+                oldPasswordEditingController.text, testPasswordStatus),
             text: 'Mật khẩu hiện tại',
             passwordVisible: true,
             textEditingController: oldPasswordEditingController,
             onChanged: (value) {
-              errorTextPassword = '';
-              testPasswordStatus = Status.dirty;
+              testPasswordStatus = TestStatus.dirty;
               setState(() {});
             },
           ),
@@ -94,16 +84,15 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             height: size.height * 8 / 896,
           ),
           PasswordTextFieldWidget(
-            errorText: (testNewPasswordStatus == Status.dirty)
-                ? ValidateHelper.validateNewPassword(
-                    newPasswordEditingController.text,
-                    oldPasswordEditingController.text)
-                : null,
+            errorText: ValidateHelper.getErrorTextNewPassword(
+                oldPasswordEditingController.text,
+                newPasswordEditingController.text,
+                testNewPasswordStatus),
             text: 'Mật khẩu mới',
             passwordVisible: true,
             textEditingController: newPasswordEditingController,
             onChanged: (value) {
-              testNewPasswordStatus = Status.dirty;
+              testNewPasswordStatus = TestStatus.dirty;
               setState(() {});
             },
           ),
@@ -111,16 +100,15 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             height: size.height * 8 / 896,
           ),
           PasswordTextFieldWidget(
-            errorText: (testConfirmPasswordStatus == Status.dirty)
-                ? ValidateHelper.validateConfirmPassword(
-                    confirmPasswordEditingController.text,
-                    newPasswordEditingController.text)
-                : null,
+            errorText: ValidateHelper.getErrorTextConfirmPassword(
+                confirmPasswordEditingController.text,
+                newPasswordEditingController.text,
+                testConfirmPasswordStatus),
             text: 'Nhập lại mật khẩu mới',
             passwordVisible: true,
             textEditingController: confirmPasswordEditingController,
             onChanged: (value) {
-              testConfirmPasswordStatus = Status.dirty;
+              testConfirmPasswordStatus = TestStatus.dirty;
               setState(() {});
             },
           ),
@@ -131,9 +119,20 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             text: 'Xác nhận',
             width: size.width / 2,
             colorText: Colors.white,
-            colorButton: (errorTextPassword == null &&
-                    errorTextNewPassword == null &&
-                    errorTextConfirmPassword == null)
+            colorButton: (ValidateHelper.getErrorTextPassword(
+                            oldPasswordEditingController.text,
+                            testPasswordStatus) ==
+                        null &&
+                    ValidateHelper.getErrorTextNewPassword(
+                            oldPasswordEditingController.text,
+                            newPasswordEditingController.text,
+                            testNewPasswordStatus) ==
+                        null &&
+                    ValidateHelper.getErrorTextConfirmPassword(
+                            confirmPasswordEditingController.text,
+                            newPasswordEditingController.text,
+                            testConfirmPasswordStatus) ==
+                        null)
                 ? const Color(0xff1EC5F9)
                 : const Color(0xff8C8C8C),
             onTap: () {

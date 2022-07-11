@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../helper/validate_helper.dart';
 import '../../widget/list_icon_widget.dart';
 import '../../widget/password_text_field_widget.dart';
 import '../otp/otp_screen.dart';
@@ -15,15 +16,16 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  TextEditingController phoneController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  String? errorTextPassword;
+  late TextEditingController phoneController;
+  late TextEditingController passwordController;
+
+  TestStatus testPasswordStatus = TestStatus.pure;
 
   @override
   void initState() {
     super.initState();
-    phoneController;
-    passwordController;
+    phoneController = TextEditingController();
+    passwordController = TextEditingController();
   }
 
   @override
@@ -31,15 +33,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     phoneController.dispose();
     passwordController.dispose();
     super.dispose();
-  }
-
-  String? validatePassword(String text) {
-    if (text.isEmpty) {
-      return errorTextPassword = 'Vui lòng nhập mật khẩu hiện tại';
-    } else if (text.length < 8) {
-      return errorTextPassword = 'Mật khẩu nhập không đủ 8 kí tự';
-    }
-    return errorTextPassword = null;
   }
 
   @override
@@ -109,7 +102,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               TextField(
                 maxLines: 1,
                 controller: phoneController,
-                // obscureText: _isObscurePassword,
                 cursorColor: Colors.white,
                 keyboardType: TextInputType.phone,
                 onChanged: (text) {
@@ -154,13 +146,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               SizedBox(height: size.height * 8 / 896),
               PasswordTextFieldWidget(
-                errorText: errorTextPassword,
+                errorText: ValidateHelper.getErrorTextPassword(
+                    passwordController.text, testPasswordStatus),
                 text: 'Mật khẩu',
                 passwordVisible: true,
                 textEditingController: passwordController,
                 onChanged: (value) {
-                  errorTextPassword = '';
-                  validatePassword(value);
+                  testPasswordStatus = TestStatus.dirty;
                   setState(() {});
                 },
               ),
@@ -197,8 +189,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 40,
                   child: TextButton(
                     onPressed: (phoneController.text.isNotEmpty &&
-                            passwordController.text.isNotEmpty &&
-                            errorTextPassword == null)
+                            ValidateHelper.getErrorTextPassword(
+                                    passwordController.text,
+                                    testPasswordStatus) ==
+                                null)
                         ? () {
                             Navigator.push(
                               context,
@@ -216,8 +210,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     style: ButtonStyle(
                       backgroundColor: (phoneController.text.isNotEmpty &&
-                              passwordController.text.isNotEmpty &&
-                              errorTextPassword == null)
+                              ValidateHelper.getErrorTextPassword(
+                                      passwordController.text,
+                                      testPasswordStatus) ==
+                                  null)
                           ? MaterialStateProperty.all<Color>(
                               const Color(0xff1EC5F9))
                           : MaterialStateProperty.all<Color>(

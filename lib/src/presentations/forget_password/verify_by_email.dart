@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:ott_prepare/src/presentations/change_password/change_password_screen.dart';
+import 'package:ott_prepare/src/presentations/phone_auth/change_password/change_password_screen.dart';
 
 class VerifyByEmail extends StatelessWidget {
   const VerifyByEmail({Key? key}) : super(key: key);
