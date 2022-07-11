@@ -150,7 +150,8 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed('/change_password');
+                  // Navigator.of(context).pushNamed('/change_password');
+                  Navigator.of(context).pushNamed('/forgot_password');
                 },
                 child: const Text(
                   ' Quên mật khẩu',

@@ -85,8 +85,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
               TextField(
                 maxLines: 1,
                 controller: phoneController,
-                obscureText: _isObscurePassword,
+                // obscureText: _isObscurePassword,
                 cursorColor: Colors.white,
+                keyboardType: TextInputType.phone,
                 onChanged: (text) {
                   setState(() {});
                 },
@@ -121,9 +122,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       onPressed: () {
                         phoneController.clear();
-                        setState(() {
-
-                        });
+                        setState(() {});
                       },
                     )),
               ),
