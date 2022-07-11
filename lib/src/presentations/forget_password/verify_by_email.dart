@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ott_prepare/src/presentations/change_password/change_password_screen.dart';
+
 class VerifyByEmail extends StatelessWidget {
   const VerifyByEmail({Key? key}) : super(key: key);
   @override
@@ -35,16 +36,16 @@ class VerifyByEmail extends StatelessWidget {
       width: size.width,
       child: Padding(
         padding: EdgeInsets.only(
-            left: size.width * .08,
-            right: size.width * .08,
+            left: size.width * .078,
+            right: size.width * .078,
             top: size.width * .12),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 32),
+              SizedBox(height: size.height * 32 / 896),
               SvgPicture.asset("assets/icons/svgs/ic_by_email.svg"),
-              const SizedBox(height: 20),
+              SizedBox(height: size.height * 20 / 896),
               RichText(
                 text: TextSpan(
                   style: const TextStyle(
@@ -53,8 +54,8 @@ class VerifyByEmail extends StatelessWidget {
                       color: Colors.white),
                   children: [
                     const TextSpan(
-                      text:
-                      "Mã xác minh đã được gửi đến địa chỉ email ",),
+                      text: "Mã xác minh đã được gửi đến địa chỉ email ",
+                    ),
                     TextSpan(
                       text: "thuylinh.nguyen@mcvgo.com",
                       style: const TextStyle(
@@ -67,10 +68,10 @@ class VerifyByEmail extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: size.height * 20 / 896),
               SizedBox(
-                width: 215,
-                height: 40,
+                width: size.width * 215 / 414,
+                height: size.height * 40 / 896,
                 child: TextButton(
                   onPressed: () {
                     Navigator.push(

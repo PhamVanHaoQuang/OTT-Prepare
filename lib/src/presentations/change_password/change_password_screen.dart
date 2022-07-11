@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ott_prepare/src/success_screen/success_screen.dart';
 
+import '../../widget/password_text_field_widget.dart';
+
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({Key? key}) : super(key: key);
 
@@ -12,8 +14,46 @@ class ChangePasswordScreen extends StatefulWidget {
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
-  bool _isShowPassword = false;
-  bool _isShowConfirmPassword = false;
+  // bool _isShowPassword = false;
+  // bool _isShowConfirmPassword = false;
+
+  String? errorTextNewPassword;
+  String? errorTextConfirmPassword;
+
+  @override
+  void initState() {
+    super.initState();
+    //  oldPasswordEditingController = TextEditingController(text: '');
+    newPasswordController;
+    confirmPasswordController;
+  }
+
+  @override
+  void dispose() {
+    newPasswordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  String? validateNewPassword(String text) {
+    if (text.isEmpty) {
+      return errorTextNewPassword = 'Vui lòng nhập mật khẩu mới';
+    } else if (text.length < 8) {
+      return errorTextNewPassword = 'Mật khẩu nhập không đủ 8 kí tự';
+    }
+    return errorTextNewPassword = null;
+  }
+
+  String? validateConfirmPassword(String text) {
+    if (text.isEmpty) {
+      return errorTextConfirmPassword = 'Vui lòng nhập lại mật khẩu mới';
+    } else if (text.length < 8) {
+      return errorTextConfirmPassword = 'Mật khẩu nhập không đủ 8 kí tự';
+    } else if (text != newPasswordController.text) {
+      return errorTextConfirmPassword = 'Mật khẩu nhập lại không đúng';
+    }
+    return errorTextConfirmPassword = null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,129 +89,45 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       width: size.width,
       child: Padding(
         padding: EdgeInsets.only(
-          left: size.width * .08,
-          right: size.width * .08,
+          left: size.width * .078,
+          right: size.width * .078,
           top: size.width * .12,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 24),
-            const Padding(
-              padding: EdgeInsets.only(left: 16),
-              child: Text(
-                "Mật khẩu mới",
-                style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white),
-              ),
+            SizedBox(height: size.height * 24 / 896),
+            PasswordTextFieldWidget(
+              errorText: errorTextNewPassword,
+              text: 'Mật khẩu mới',
+              passwordVisible: true,
+              textEditingController: newPasswordController,
+              onChanged: (value) {
+                errorTextNewPassword = null;
+                validateNewPassword(value);
+                setState(() {});
+              },
             ),
-            const SizedBox(height: 8),
-            TextField(
-              maxLines: 1,
-              controller: newPasswordController,
-              obscureText: _isShowPassword,
-              cursorColor: Colors.white,
-              style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.white),
-              decoration: InputDecoration(
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                fillColor: const Color(0xff4B4B4B),
-                filled: true,
-                focusedBorder: OutlineInputBorder(
-                  borderSide:
-                      const BorderSide(color: Color(0xff1EC5F9), width: 1.0),
-                  borderRadius: BorderRadius.circular(32.0),
-                ),
-                hintText: "Ít nhất 8 kí tự",
-                hintStyle: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white.withOpacity(0.5)),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(32.0),
-                ),
-                suffixIcon: IconButton(
-                  icon: (_isShowPassword)
-                      ? Icon(
-                          Icons.remove_red_eye_outlined,
-                          color: Colors.white.withOpacity(0.5),
-                        )
-                      : Icon(
-                          Icons.visibility_off_outlined,
-                          color: Colors.white.withOpacity(0.5),
-                        ),
-                  onPressed: () => setState(() {
-                    _isShowPassword = !_isShowPassword;
-                  }),
-                ),
-              ),
+            SizedBox(
+              height: size.height * 8 / 896,
             ),
-            const SizedBox(height: 24),
-            const Padding(
-              padding: EdgeInsets.only(left: 16),
-              child: Text(
-                "Mật lại khẩu mới",
-                style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white),
-              ),
+            PasswordTextFieldWidget(
+              errorText: errorTextConfirmPassword,
+              text: 'Nhập lại mật khẩu mới',
+              passwordVisible: true,
+              textEditingController: confirmPasswordController,
+              onChanged: (value) {
+                validateConfirmPassword(value);
+                setState(() {});
+              },
             ),
-            const SizedBox(height: 8),
-            TextField(
-              maxLines: 1,
-              controller: confirmPasswordController,
-              obscureText: _isShowConfirmPassword,
-              cursorColor: Colors.white,
-              style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.white),
-              decoration: InputDecoration(
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                fillColor: const Color(0xff4B4B4B),
-                filled: true,
-                focusedBorder: OutlineInputBorder(
-                  borderSide:
-                      const BorderSide(color: Color(0xff1EC5F9), width: 1.0),
-                  borderRadius: BorderRadius.circular(32.0),
-                ),
-                hintText: "Ít nhất 8 kí tự",
-                hintStyle: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white.withOpacity(0.5)),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(32.0),
-                ),
-                suffixIcon: IconButton(
-                  icon: (_isShowConfirmPassword)
-                      ? Icon(
-                          Icons.remove_red_eye_outlined,
-                          color: Colors.white.withOpacity(0.5),
-                        )
-                      : Icon(
-                          Icons.visibility_off_outlined,
-                          color: Colors.white.withOpacity(0.5),
-                        ),
-                  onPressed: () => setState(
-                    () {
-                      _isShowConfirmPassword = !_isShowConfirmPassword;
-                    },
-                  ),
-                ),
-              ),
+            SizedBox(
+              height: size.height * 87 / 896,
             ),
             Center(
               child: SizedBox(
-                height: 40,
-                width: 215,
+                height: size.height * 40 / 896,
+                width: size.width * 215 / 414,
                 child: TextButton(
                   onPressed: () {
                     Navigator.push(

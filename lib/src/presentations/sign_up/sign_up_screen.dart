@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../widget/list_icon_widget.dart';
+import '../../widget/password_text_field_widget.dart';
 import '../otp/otp_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -15,8 +17,30 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  bool _isObscurePassword = true;
-  String? errorText;
+  String? errorTextPassword;
+
+  @override
+  void initState() {
+    super.initState();
+    phoneController;
+    passwordController;
+  }
+
+  @override
+  void dispose() {
+    phoneController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  String? validatePassword(String text) {
+    if (text.isEmpty) {
+      return errorTextPassword = 'Vui lòng nhập mật khẩu hiện tại';
+    } else if (text.length < 8) {
+      return errorTextPassword = 'Mật khẩu nhập không đủ 8 kí tự';
+    }
+    return errorTextPassword = null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +68,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       width: size.width,
       child: Padding(
         padding: EdgeInsets.only(
-            left: size.width * .08,
-            right: size.width * .08,
+            left: size.width * .078,
+            right: size.width * .078,
             top: size.width * .12),
         child: SingleChildScrollView(
           child: Column(
@@ -119,6 +143,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       icon: SvgPicture.asset(
                         "assets/icons/svgs/ic_delete.svg",
                         fit: BoxFit.scaleDown,
+                        height: 22,
+                        width: 22,
                       ),
                       onPressed: () {
                         phoneController.clear();
@@ -126,74 +152,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       },
                     )),
               ),
-              const SizedBox(height: 12),
-              const Padding(
-                padding: EdgeInsets.only(left: 16),
-                child: Text(
-                  "Mật khẩu",
-                  style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white),
-                ),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                maxLines: 1,
-                controller: passwordController,
-                obscureText: _isObscurePassword,
-                cursorColor: Colors.white,
-                style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white),
-                onChanged: (text) {
-                  if (text.length < 8) {
-                    errorText = "Mật khẩu không đủ 8 kí tự";
-                  } else {
-                    errorText = null;
-                  }
+              SizedBox(height: size.height * 8 / 896),
+              PasswordTextFieldWidget(
+                errorText: errorTextPassword,
+                text: 'Mật khẩu',
+                passwordVisible: true,
+                textEditingController: passwordController,
+                onChanged: (value) {
+                  errorTextPassword = '';
+                  validatePassword(value);
                   setState(() {});
                 },
-                decoration: InputDecoration(
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  fillColor: const Color(0xff4B4B4B),
-                  filled: true,
-                  focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        const BorderSide(color: Color(0xff1EC5F9), width: 1.0),
-                    borderRadius: BorderRadius.circular(32.0),
-                  ),
-                  hintText: "Ít nhất 8 kí tự",
-                  hintStyle: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white.withOpacity(0.5)),
-                  helperText: "",
-                  errorText: errorText,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(32.0),
-                  ),
-                  suffixIcon: IconButton(
-                    icon: (_isObscurePassword)
-                        ? Icon(
-                            Icons.remove_red_eye_outlined,
-                            color: Colors.white.withOpacity(0.5),
-                          )
-                        : Icon(
-                            Icons.visibility_off_outlined,
-                            color: Colors.white.withOpacity(0.5),
-                          ),
-                    onPressed: () => setState(
-                      () {
-                        _isObscurePassword = !_isObscurePassword;
-                      },
-                    ),
-                  ),
-                ),
               ),
-              const SizedBox(height: 36),
+              SizedBox(height: size.height * 36 / 896),
               Center(
                 child: RichText(
                   text: TextSpan(
@@ -219,7 +190,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 32),
+              SizedBox(height: size.height * 32 / 896),
               Center(
                 child: SizedBox(
                   width: 215,
@@ -227,7 +198,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: TextButton(
                     onPressed: (phoneController.text.isNotEmpty &&
                             passwordController.text.isNotEmpty &&
-                            errorText == null)
+                            errorTextPassword == null)
                         ? () {
                             Navigator.push(
                               context,
@@ -246,7 +217,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     style: ButtonStyle(
                       backgroundColor: (phoneController.text.isNotEmpty &&
                               passwordController.text.isNotEmpty &&
-                              errorText == null)
+                              errorTextPassword == null)
                           ? MaterialStateProperty.all<Color>(
                               const Color(0xff1EC5F9))
                           : MaterialStateProperty.all<Color>(
@@ -260,7 +231,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 32),
+              SizedBox(height: size.height * 32 / 896),
               const Center(
                 child: Text(
                   "Đăng ký bằng",
@@ -271,21 +242,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset("assets/icons/svgs/ic_google.svg"),
-                  const SizedBox(width: 32),
-                  SvgPicture.asset("assets/icons/svgs/ic_facebook.svg"),
-                ],
-              ),
-              const SizedBox(height: 54),
+              SizedBox(height: size.height * 20 / 896),
+              const ListIconWidget(),
+              SizedBox(height: size.height * 54 / 896),
               Center(
                 child: RichText(
                   text: TextSpan(
                     style: const TextStyle(
-                        fontSize: 12,
+                        fontSize: 15,
                         fontWeight: FontWeight.w400,
                         color: Colors.white),
                     children: [
@@ -294,10 +258,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         text: "Đăng Nhập",
                         style: const TextStyle(
                             color: Color(0xFF1EC5F9),
+                            fontSize: 15,
                             fontWeight: FontWeight.bold),
                         recognizer: TapGestureRecognizer()..onTap = () {},
                       ),
-                      const TextSpan(text: " ngay"),
+                      const TextSpan(
+                        text: " ngay",
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white),
+                      ),
                     ],
                   ),
                 ),
