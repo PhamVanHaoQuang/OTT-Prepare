@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ott_prepare/src/presentations/forget_password/verify_by_email.dart';
-import 'package:ott_prepare/src/presentations/sign_in/sign_up_screen.dart';
+import 'package:ott_prepare/src/presentations/sign_up/sign_up_screen.dart';
 
 import '../otp/otp_screen.dart';
 
@@ -15,16 +15,15 @@ class ForgetPasswordScreen extends StatefulWidget {
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   TextEditingController phoneForgetPassController = TextEditingController();
 
-
   @override
   void initState() {
     super.initState();
-
   }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-     onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+      onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
         appBar: AppBar(
           leading: InkWell(
@@ -86,13 +85,13 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     fontWeight: FontWeight.w400,
                     color: Colors.white),
                 decoration: InputDecoration(
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
                     fillColor: const Color(0xff4B4B4B),
                     filled: true,
                     focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(color: Color(0xff1EC5F9), width: 1.0),
+                      borderSide: const BorderSide(
+                          color: Color(0xff1EC5F9), width: 1.0),
                       borderRadius: BorderRadius.circular(32.0),
                     ),
                     hintText: "Nhập số điện thoại hoặc email",
@@ -125,10 +124,11 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    (phoneForgetPassController.text.contains("@"))
-                                        ? const VerifyByEmail()
-                                        : const OTPScreen(),
+                                builder: (context) => (phoneForgetPassController
+                                        .text
+                                        .contains("@"))
+                                    ? const VerifyByEmail()
+                                    : const OTPScreen(),
                               ),
                             );
                           }
@@ -141,11 +141,12 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                           fontSize: 15),
                     ),
                     style: ButtonStyle(
-                      backgroundColor: (phoneForgetPassController.text.isNotEmpty)
-                          ? MaterialStateProperty.all<Color>(
-                              const Color(0xff1EC5F9))
-                          : MaterialStateProperty.all<Color>(
-                              const Color(0xffFFFFFF).withOpacity(0.5)),
+                      backgroundColor:
+                          (phoneForgetPassController.text.isNotEmpty)
+                              ? MaterialStateProperty.all<Color>(
+                                  const Color(0xff1EC5F9))
+                              : MaterialStateProperty.all<Color>(
+                                  const Color(0xffFFFFFF).withOpacity(0.5)),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(32),

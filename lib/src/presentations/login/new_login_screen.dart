@@ -132,13 +132,14 @@ class _LoginScreenState extends State<LoginScreen> {
             height: 10,
           ),
           PasswordTextFieldWidget(
+            passwordVisible: true,
             onChanged: (value) {
               errorTextPassword = null;
+
               validatePassword(passwordEditingController.text);
               setState(() {});
             },
             text: 'Mật khẩu',
-            passwordVisible: true,
             errorText: errorTextPassword,
             textEditingController: passwordEditingController,
           ),
@@ -151,6 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
               InkWell(
                 onTap: () {
                   Navigator.of(context).pushNamed('/change_password');
+                  //Navigator.of(context).pushNamed('/forgot_password');
                 },
                 child: const Text(
                   ' Quên mật khẩu',

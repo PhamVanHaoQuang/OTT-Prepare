@@ -119,7 +119,7 @@ class PasswordTextFieldWidget extends StatefulWidget {
   PasswordTextFieldWidget({
     Key? key,
     required this.text,
-     this.errorText,
+    this.errorText,
     this.textEditingController,
     required this.passwordVisible,
     required this.onChanged,
@@ -157,8 +157,10 @@ class _PasswordTextFieldWidgetState extends State<PasswordTextFieldWidget> {
           // margin: EdgeInsets.only(bottom: size.height * .8 / 100),
           style: const TextStyle(fontSize: 15, color: Colors.white),
           controller: widget.textEditingController,
+
           autofocus: true,
           keyboardType: TextInputType.visiblePassword,
+          obscureText: widget.passwordVisible,
           onChanged: widget.onChanged,
           decoration: InputDecoration(
             border: OutlineInputBorder(
